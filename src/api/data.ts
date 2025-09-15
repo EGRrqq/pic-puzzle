@@ -10,13 +10,23 @@ export interface IPuzzleData {
   grid: ICell;
 }
 
-interface PuzzleEntity {
+interface IPuzzleEntity {
   currentPos: ICell;
   correctPos: ICell;
   isCorrect: boolean;
 }
 
-export type TPuzzleEntities = Record<string, PuzzleEntity>;
+/** where string is a file name like 'image1x1.webp' */
+export type TPuzzleEntities = Record<string, IPuzzleEntity>;
+
+export interface IGameData {
+  currentPuzzle: IPuzzleData;
+  currentPuzzleEntities: TPuzzleEntities;
+  entitySelected: IPuzzleEntity | null;
+  isGameEnded: boolean;
+  entityAmount: number;
+  correctEntityAmount: number;
+}
 
 const doggoPuzzle: string[] = [
   "image1x1.webp",
@@ -37,18 +47,34 @@ const doggoPuzzle: string[] = [
   "image4x4.webp",
 ];
 
-const doggoPuzzleData: IPuzzleData = {
+const doggoPuzzleData: IPuzzleData = Object.freeze({
   puzzle: doggoPuzzle,
   grid: {
     col: 4,
     row: 4,
   },
-};
+});
 
 /** mockup data from the "server" */
-const doggoPuzzleEntities = createPuzzleEntities(doggoPuzzleData);
+const createGameData = (puzzleData: IPuzzleData): IGameData => {
+  const currentPuzzleEntities = createPuzzleEntities(puzzleData);
+
+  // Calculate initial correct entity count
+  const correctEntityAmount = Object.values(currentPuzzleEntities).filter(
+    (entity) => entity.isCorrect
+  ).length;
+
+  return {
+    currentPuzzle: puzzleData,
+    currentPuzzleEntities,
+    entitySelected: null,
+    isGameEnded: false,
+    entityAmount: puzzleData.puzzle.length,
+    correctEntityAmount,
+  };
+};
 
 /** fetch imitation */
-export const fetchPuzzleEntities: () => Promise<TPuzzleEntities> = () => {
-  return new Promise((res) => res(doggoPuzzleEntities));
+export const fetchGameData: () => Promise<IGameData> = () => {
+  return new Promise((res) => res(createGameData(doggoPuzzleData)));
 };
