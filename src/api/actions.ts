@@ -1,5 +1,9 @@
 import type { ICell, IPuzzleData, TPuzzleEntities } from "./data";
 
+interface IEntitiesOptions {
+  shuffle: boolean;
+}
+
 /** Helper function to shuffle array */
 const shuffleArray = <T>(array: T[]): T[] => {
   const newArray = [...array];
@@ -29,25 +33,36 @@ const parsePuzzlePosition = (filename: string) => {
   };
 };
 
-/** create game data from the original array of puzzle images + grid size */
-export const createPuzzleEntities = (data: IPuzzleData): TPuzzleEntities => {
-  // generate all possible grid positions
+/**  generate all possible grid positions */
+const generateAllPositions = (grid: ICell): ICell[] => {
   const allPositions: ICell[] = [];
-  for (let col = 1; col <= data.grid.col; col++) {
-    for (let row = 1; row <= data.grid.row; row++) {
+  for (let col = 1; col <= grid.col; col++) {
+    for (let row = 1; row <= grid.row; row++) {
       allPositions.push({ col, row });
     }
   }
 
-  // shuffle the positions
-  const shuffledPositions = shuffleArray(allPositions);
+  return allPositions;
+};
 
+const entitiesOptions: IEntitiesOptions = {
+  shuffle: true,
+};
+
+/** create game data from the original array of puzzle images + grid size */
+export const createPuzzleEntities = (
+  data: IPuzzleData,
+  options: IEntitiesOptions = entitiesOptions
+): TPuzzleEntities => {
   // create entities object
   const entities: TPuzzleEntities = {};
 
   data.puzzle.forEach((filename, index) => {
-    const correctPos = parsePuzzlePosition(filename);
-    const currentPos = shuffledPositions[index];
+    const pos = parsePuzzlePosition(filename);
+    const correctPos = pos;
+    const currentPos = options.shuffle
+      ? shuffleArray(generateAllPositions(data.grid))[index]
+      : pos;
 
     entities[filename] = {
       currentPos,
