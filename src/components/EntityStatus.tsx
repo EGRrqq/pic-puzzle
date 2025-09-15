@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export default function EntityStatus() {
   const gameData: IGameData = useSelector((state) => state.game);
-  useEffect(() => {}, [gameData]);
+  console.log(gameData);
 
   if (gameData.entitySelected) {
     return (

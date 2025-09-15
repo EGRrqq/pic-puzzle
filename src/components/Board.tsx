@@ -34,7 +34,6 @@ export default function Board() {
                 key={key}
                 onClick={() => {
                   dispatch(selectEntity(entity));
-                  console.log(gameData);
                 }}
                 style={{
                   border: entity.isCorrect
