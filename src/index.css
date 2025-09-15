@@ -19,7 +19,6 @@ main {
   min-height: 100dvh;
 }
 
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
