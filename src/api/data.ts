@@ -30,20 +30,23 @@ export interface IGameData {
 
 const doggoPuzzle: string[] = [
   "image1x1.webp",
-  "image1x3.webp",
   "image2x1.webp",
-  "image2x3.webp",
   "image3x1.webp",
-  "image3x3.webp",
   "image4x1.webp",
-  "image4x3.webp",
+
   "image1x2.webp",
-  "image1x4.webp",
   "image2x2.webp",
-  "image2x4.webp",
   "image3x2.webp",
-  "image3x4.webp",
   "image4x2.webp",
+
+  "image1x3.webp",
+  "image2x3.webp",
+  "image3x3.webp",
+  "image4x3.webp",
+
+  "image1x4.webp",
+  "image2x4.webp",
+  "image3x4.webp",
   "image4x4.webp",
 ];
 
@@ -57,7 +60,9 @@ const doggoPuzzleData: IPuzzleData = Object.freeze({
 
 /** mockup data from the "server" */
 const createGameData = (puzzleData: IPuzzleData): IGameData => {
-  const currentPuzzleEntities = createPuzzleEntities(puzzleData);
+  const currentPuzzleEntities = createPuzzleEntities(puzzleData, {
+    shuffle: false,
+  });
 
   // Calculate initial correct entity count
   const correctEntityAmount = Object.values(currentPuzzleEntities).filter(

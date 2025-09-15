@@ -1,18 +1,12 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import { fetchGameData, type IGameData } from "./api/data";
+import Board from "./components/Board";
 
 function App() {
-  const [gameData, setGameData] = useState<IGameData>();
-  useEffect(() => {
-    (async () => {
-      const gameData = await fetchGameData();
-      setGameData(gameData);
-    })();
-  }, []);
-  console.log(gameData);
-
-  return <div></div>;
+  return (
+    <main className="grid place-content-center-safe">
+      <Board />
+    </main>
+  );
 }
 
 export default App;
